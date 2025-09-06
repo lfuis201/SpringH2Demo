@@ -1,7 +1,9 @@
 package com.example.SpringH2Demo.controller;
 
+import com.example.SpringH2Demo.dto.ProductoDTO;
 import com.example.SpringH2Demo.model.Producto;
 import com.example.SpringH2Demo.service.ProductoService;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,6 +64,17 @@ public class ProductoController {
             @RequestParam Double min,
             @RequestParam Double max) {
         return service.findByPrecioBetween(min, max);
+    }
+
+    // ✅ Nuevo endpoint: crear usando DTO
+    @PostMapping("/dto")
+    public ResponseEntity<ProductoDTO> createFromDto(@RequestBody ProductoDTO dto) {
+        return ResponseEntity.ok(service.createProductDTO(dto));
+    }
+
+    @GetMapping("getProducto/{id}")
+    public Producto getProducto(@PathVariable Long id) throws ChangeSetPersister.NotFoundException {
+        return service.findByIdOrThrow(id);  // Lanza NotFoundException si no existe
     }
 
 
